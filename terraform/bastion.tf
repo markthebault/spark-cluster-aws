@@ -1,3 +1,4 @@
+
 resource "aws_instance" "bastion" {
   ami           = "${lookup(var.ami_bastion, var.aws_region)}"
   instance_type = "t2.micro"
@@ -12,12 +13,9 @@ resource "aws_instance" "bastion" {
   }
 }
 
-
-resource "aws_key_pair" "emr_kp" {
-  key_name   = "mth-key"
-  public_key = "${file("${var.key_pair_public_path}")}"
+resource "aws_eip" "ip_bastion" {
+  instance = "${aws_instance.bastion.id}"
 }
-
 
 
 resource "aws_security_group" "bastion" {

@@ -33,3 +33,25 @@ variable "ami_coreos" {
     "ap-southeast-1" = "ami-04c48078"
   }
 }
+
+variable "spark_master_instance_type" {
+  default = "m4.large"
+}
+
+######################### CONFI workers
+variable "spark_worker_instance_type" {
+  default = "m4.large"
+}
+
+variable "spark_worker_memory" {
+  default = "6gb"
+}
+
+variable "spark_worker_cores" {
+  default = "2"
+}
+###############################
+
+variable "spark_docker_image" {
+  default = "gettyimages/spark:2.2.1-hadoop-2.7"
+}
