@@ -3,7 +3,7 @@ resource "aws_instance" "bastion" {
   ami           = "${lookup(var.ami_bastion, var.aws_region)}"
   instance_type = "t2.micro"
   subnet_id = "${module.vpc.public_subnets[0]}"
-  security_groups = ["${aws_security_group.bastion.id}"]
+  vpc_security_group_ids = ["${aws_security_group.bastion.id}"]
   key_name = "${aws_key_pair.emr_kp.id}"
 
   tags {

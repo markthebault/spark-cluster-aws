@@ -15,7 +15,7 @@ resource "aws_instance" "spark_worker" {
   ami           = "${lookup(var.ami_coreos, var.aws_region)}"
   instance_type = "${var.spark_worker_instance_type}"
   subnet_id = "${module.vpc.private_subnets[0]}"
-  security_groups = ["${aws_security_group.spark_worker.id}"]
+  vpc_security_group_ids = ["${aws_security_group.spark_worker.id}"]
   key_name = "${aws_key_pair.emr_kp.id}"
 
   user_data = "${data.template_file.spark_worker_user_data.rendered}"
