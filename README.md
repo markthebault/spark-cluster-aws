@@ -39,6 +39,7 @@ Terraform will output the zeppelin URL and the Spark UI URL as following :
 In the current state, to facilitate the testing, terraform local state is used. I will advice you to use terraform remote states with AWS S3 as backend and DynamoDB as locking. In order to use that, create a new `a-funny-file-name.tf` file in the `./terraform/` directory with the following content:
 
 ```
+# The s3 bucket and the DynamoDB table must be created before using remote states
 terraform {
   backend "s3" {
     bucket         = "my-terraform-state"
