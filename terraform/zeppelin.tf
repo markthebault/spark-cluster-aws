@@ -11,7 +11,7 @@ data "template_file" "zeppelin_user_data" {
 resource "aws_instance" "zeppelin" {
   ami           = "${lookup(var.ami_coreos, var.aws_region)}"
   instance_type = "${var.spark_master_instance_type}"
-  subnet_id = "${module.vpc.public_subnets[0]}"
+  subnet_id = "${module.vpc.private_subnets[0]}"
   vpc_security_group_ids = ["${aws_security_group.zeppelin.id}"]
   key_name = "${aws_key_pair.emr_kp.id}"
   iam_instance_profile = "${aws_iam_instance_profile.spark_profile.id}"
@@ -35,19 +35,6 @@ resource "aws_route53_record" "zeppelin_dns_record" {
 }
 
 
-output "zeppelin_public_address" {
-  value = "http://${aws_eip.ip_zeppelin.public_ip}:8080"
-}
-
-output "spark_ui_public_address" {
-  value = "http://${aws_eip.ip_zeppelin.public_ip}:8081"
-}
-
-resource "aws_eip" "ip_zeppelin" {
-  instance = "${aws_instance.zeppelin.id}"
-}
-
-
 resource "aws_security_group" "zeppelin" {
   name        = "zeppelin-ssh-sg"
   description = "Allow HTTP traffic on port 8080"
@@ -57,7 +44,7 @@ resource "aws_security_group" "zeppelin" {
     from_port   = 8080
     to_port     = 8080
     protocol    = "tcp"
-    cidr_blocks = ["${var.public_admin_ip_range}"]
+    security_groups = ["${aws_security_group.zeppelin_elb.id}"]
   }
 
   #spark proxy
@@ -65,14 +52,14 @@ resource "aws_security_group" "zeppelin" {
     from_port   = 8081
     to_port     = 8081
     protocol    = "tcp"
-    cidr_blocks = ["${var.public_admin_ip_range}"]
+    security_groups = ["${aws_security_group.zeppelin_elb.id}"]
   }
 
   ingress {
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["${var.public_admin_ip_range}"]
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    security_groups = ["${aws_security_group.bastion.id}"]
   }
 
   egress {
