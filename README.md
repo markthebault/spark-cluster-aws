@@ -6,8 +6,8 @@ There is also a bastion host with is used to ssh into the VMs.
 All spark related instances are base on CoreOS stable images running containers on with the docker Host mode.
 
 ## Architecture
-The spark cluster is on a private subnet. There is different security groups between the master and the workers.
-Bastion and the zeppelin instance are running in the public subnet.
+The spark cluster and the zeppelin server are on a private subnet. There is different security groups between the master and the workers.
+Bastion is running in the public subnet. An Classical load balancer is running in a public subnet to balance the zeppelin traffic.
 
 Make sure you change the default value for the variable `public_admin_ip_range` and set it up to you ip address
 
@@ -17,7 +17,7 @@ The spark workers are created by an auto scaling group. Adjust the trigger to yo
 
 There is a private host zone created to add dns support for the spark master and the zeppelin server. This is a private zone, it will not be reachable from internet.
 
-Since the Spark cluster is in a private subnet, the Spark ui is not directly reachable. Adding a openvpn server to this repo would be too heavy, so I used a very cool proxy based on [this repository](https://github.com/aseigneurin/spark-ui-proxy). This proxy is running on the zeppelin instance.
+Since the Spark cluster is in a private subnet, the Spark ui is not directly reachable. Adding a openvpn server to this repo would be too heavy, so I used a very cool proxy based on [this repository](https://github.com/aseigneurin/spark-ui-proxy). This proxy is running on the zeppelin instance. And serverd via the Load balances
 
 ## To know before running
 This is for development purpose, there is no high availability for the spark master. If feel free to submit a pool request with the [support of zookeeper for the master HA.](https://spark.apache.org/docs/latest/spark-standalone.html#high-availability)
@@ -26,6 +26,5 @@ Before using this repository make sure you update the instance profile of the sp
 
 ## Things to add
 This is the list of the missing feature that would be great to have
-- Use an ELB with HTTPS in front of Zeppelin
 - Support of users in zeppelin with passwords
 - customisable spark-configuration
