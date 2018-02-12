@@ -26,5 +26,6 @@ Before using this repository make sure you update the instance profile of the sp
 
 ## Things to add
 This is the list of the missing feature that would be great to have
+- Use an ELB with HTTPS in front of Zeppelin
 - Support of users in zeppelin with passwords
 - customisable spark-configuration
