@@ -45,6 +45,9 @@ variable "spark_master_instance_type" {
 variable "spark_worker_instance_type" {
   default = "m4.large"
 }
+variable "desired_number_of_spark_workers" {
+  default = "3"
+}
 
 variable "spark_worker_memory" {
   default = "6gb"

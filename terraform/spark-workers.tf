@@ -35,8 +35,8 @@ module "asg" {
   vpc_zone_identifier       = "${module.vpc.private_subnets}"
   health_check_type         = "EC2"
   min_size                  = 2
-  max_size                  = 10
-  desired_capacity          = 2
+  max_size                  = 15
+  desired_capacity          = "${var.desired_number_of_spark_workers}"
   wait_for_capacity_timeout = 0
 
   tags = [
