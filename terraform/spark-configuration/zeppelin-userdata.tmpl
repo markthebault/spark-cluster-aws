@@ -1,5 +1,5 @@
 #!/bin/bash
 docker pull ${zeppelin_docker_image}
 docker pull ${spark_proxy_docker_image}
-docker run -d --net host --name zeppelin --restart unless-stopped ${zeppelin_docker_image}
+docker run -d --net host --name zeppelin --restart unless-stopped -e MASTER=spark://${spark_master_dns}:7077 ${zeppelin_docker_image}
 docker run -d --net host --name spark-proxy --restart unless-stopped ${spark_proxy_docker_image} ${spark_master_dns}:8080 8081
