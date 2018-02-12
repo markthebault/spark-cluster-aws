@@ -31,14 +31,6 @@ resource "aws_security_group" "spark_master" {
   description = "Security group of the spark master"
   vpc_id      = "${module.vpc.vpc_id}"
 
-  ingress {
-    from_port   = 0
-    to_port     = 65535
-    protocol    = "tcp"
-    cidr_blocks = ["${module.vpc.vpc_cidr_block}"]
-  }
-
-
   egress {
     from_port       = 0
     to_port         = 0
@@ -46,6 +38,38 @@ resource "aws_security_group" "spark_master" {
     cidr_blocks     = ["0.0.0.0/0"]
   }
 }
+
+#Security group options
+resource "aws_security_group_rule" "master_to_worker" {
+  type = "ingress"
+  from_port = 0
+  to_port = 65535
+  protocol = "tcp"
+  source_security_group_id = "${aws_security_group.spark_worker.id}"
+
+  security_group_id = "${aws_security_group.spark_master.id}"
+}
+
+resource "aws_security_group_rule" "master_to_master" {
+  type = "ingress"
+  from_port = 0
+  to_port = 65535
+  protocol = "tcp"
+  source_security_group_id = "${aws_security_group.spark_master.id}"
+
+  security_group_id = "${aws_security_group.spark_master.id}"
+}
+
+resource "aws_security_group_rule" "master_to_bastion" {
+  type = "ingress"
+  from_port = 0
+  to_port = 65535
+  protocol = "tcp"
+  source_security_group_id = "${aws_security_group.bastion.id}"
+
+  security_group_id = "${aws_security_group.spark_master.id}"
+}
+
 
 
 resource "aws_iam_instance_profile" "spark_profile" {
