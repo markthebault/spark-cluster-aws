@@ -1,3 +1,5 @@
 #!/bin/bash
+hostnamectl set-hostname ${hostname}
+sleep 30
 docker pull ${spark_docker_image}
 docker run -d --net host --restart unless-stopped --name spark-master ${spark_docker_image} ./bin/spark-class org.apache.spark.deploy.master.Master

@@ -17,3 +17,8 @@ module "vpc" {
     Environment = "${var.environment}"
   }
 }
+
+resource "aws_route53_zone" "spark_zone" {
+  name   = "${var.private_domain}"
+  vpc_id = "${module.vpc.vpc_id}"
+}

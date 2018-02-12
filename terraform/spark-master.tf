@@ -3,6 +3,7 @@ data "template_file" "spark_master_user_data" {
 
   vars {
     spark_docker_image = "${var.spark_docker_image}"
+    hostname = "master.${var.private_domain}"
   }
 }
 
@@ -27,7 +28,15 @@ resource "aws_instance" "spark_master" {
 }
 
 output "spark_master_uri" {
-  value = "spark://${aws_instance.spark_master.private_dns}:7077"
+  value = "spark://master.${var.private_domain}:7077"
+}
+
+resource "aws_route53_record" "spark_master_dns_record" {
+  zone_id = "${aws_route53_zone.spark_zone.zone_id}"
+  name    = "master.${var.private_domain}"
+  type    = "A"
+  ttl     = "10"
+  records = ["${aws_instance.spark_master.private_ip}"]
 }
 
 

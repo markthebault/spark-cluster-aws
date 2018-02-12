@@ -6,6 +6,9 @@ variable "aws_profile" {
   default = "default"
 }
 
+variable "private_domain" {
+  default = "cluster.spark"
+}
 variable "public_admin_ip_range" {
   default = "0.0.0.0/0"
 }

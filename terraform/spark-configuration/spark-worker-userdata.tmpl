@@ -1,3 +1,4 @@
 #!/bin/bash
+sleep 100
 docker pull ${spark_docker_image}
 docker run  -d --net host --restart unless-stopped --name spark-worker ${spark_docker_image} ./bin/spark-class org.apache.spark.deploy.worker.Worker -c ${spark_worker_cores} -m ${spark_worker_memory} spark://${spark_master_dns}:7077

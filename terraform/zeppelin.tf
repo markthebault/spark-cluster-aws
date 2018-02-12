@@ -4,7 +4,7 @@ data "template_file" "zeppelin_user_data" {
   vars {
     zeppelin_docker_image     = "${var.zeppelin_docker_image}"
     spark_proxy_docker_image  = "${var.spark_proxy_docker_image}"
-    spark_master_dns          = "${aws_instance.spark_master.private_dns}"
+    spark_master_dns          = "master.${var.private_domain}"
   }
 }
 
@@ -24,6 +24,15 @@ resource "aws_instance" "zeppelin" {
     Environment = "${var.environment}"
   }
 }
+
+resource "aws_route53_record" "zeppelin_dns_record" {
+  zone_id = "${aws_route53_zone.spark_zone.zone_id}"
+  name    = "zeppelin.${var.private_domain}"
+  type    = "A"
+  ttl     = "10"
+  records = ["${aws_instance.zeppelin.private_ip}"]
+}
+
 
 output "zeppelin_public_address" {
   value = "http://${aws_eip.ip_zeppelin.public_ip}:8080"

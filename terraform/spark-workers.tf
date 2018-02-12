@@ -60,7 +60,7 @@ data "template_file" "spark_worker_user_data" {
 
   vars {
     spark_docker_image = "${var.spark_docker_image}"
-    spark_master_dns = "${aws_instance.spark_master.private_dns}"
+    spark_master_dns = "master.${var.private_domain}"
     spark_worker_cores = "${var.spark_worker_cores}"
     spark_worker_memory = "${var.spark_worker_memory}"
   }
