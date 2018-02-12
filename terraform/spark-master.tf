@@ -1,3 +1,9 @@
+resource "aws_placement_group" "spark" {
+  name     = "spark-cluster"
+  strategy = "cluster"
+}
+
+
 data "template_file" "spark_master_user_data" {
   template = "${file("${path.module}/spark-configuration/spark-master-userdata.tmpl")}"
 
@@ -17,6 +23,7 @@ resource "aws_instance" "spark_master" {
   vpc_security_group_ids = ["${aws_security_group.spark_master.id}"]
   key_name = "${aws_key_pair.emr_kp.id}"
   iam_instance_profile = "${aws_iam_instance_profile.spark_profile.id}"
+  placement_group = "${aws_placement_group.spark.id}"
 
   user_data = "${data.template_file.spark_master_user_data.rendered}"
 

@@ -15,6 +15,7 @@ resource "aws_instance" "zeppelin" {
   vpc_security_group_ids = ["${aws_security_group.zeppelin.id}"]
   key_name = "${aws_key_pair.emr_kp.id}"
   iam_instance_profile = "${aws_iam_instance_profile.spark_profile.id}"
+  placement_group = "${aws_placement_group.spark.id}"
 
   user_data = "${data.template_file.zeppelin_user_data.rendered}"
 

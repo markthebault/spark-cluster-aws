@@ -12,6 +12,7 @@ module "asg" {
   security_groups       = ["${aws_security_group.spark_worker.id}"]
   iam_instance_profile  = "${aws_iam_instance_profile.spark_profile.id}"
   key_name              = "${aws_key_pair.emr_kp.id}"
+  placement_group       = "${aws_placement_group.spark.id}"
 
   ebs_block_device = [
     {
