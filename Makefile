@@ -1,4 +1,4 @@
 all:
 	cd terraform && \
 			terraform init \
-			terraform apply
+			terraform apply -auto-approve
