@@ -22,7 +22,19 @@ Since the Spark cluster is in a private subnet, the Spark ui is not directly rea
 ## To know before running
 This is for development purpose, there is no high availability for the spark master. If feel free to submit a pool request with the [support of zookeeper for the master HA.](https://spark.apache.org/docs/latest/spark-standalone.html#high-availability)
 
-Before using this repository make sure you update the instance profile of the spark cluster (in terraform/spark-master resource spark_cluster_policy) otherwise spark will have access to all your S3 buckets.
+Before using this repository make sure you **update the instance profile of the spark cluster** (in terraform/spark-master resource spark_cluster_policy) otherwise spark will have access to all your S3 buckets.
+
+## How to run
+In the ./terraform dirrectory you can create a terraform.tfvars if you want to customize the different variable of this project.
+To create the ressources:
+```
+$ make
+```
+
+Terraform will output the zeppelin URL and the Spark UI URL as following :
+- zeppelin_public_address = http://.....
+- spark_ui_public_address = http://.....:8080
+
 
 ## Things to add
 This is the list of the missing feature that would be great to have
