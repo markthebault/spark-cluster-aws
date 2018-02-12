@@ -35,6 +35,20 @@ Terraform will output the zeppelin URL and the Spark UI URL as following :
 - zeppelin_public_address = http://.....
 - spark_ui_public_address = http://.....:8080
 
+## Best practice
+In the current state, to facilitate the testing, terraform local state is used. I will advice you to use terraform remote states with AWS S3 as backend and DynamoDB as locking. In order to use that, create a new `a-funny-file-name.tf` file in the `./terraform/` directory with the following content:
+
+```
+terraform {
+  backend "s3" {
+    bucket         = "my-terraform-state"
+    key            = "spark-cluster/terraform.tfstate"
+    region         = "eu-west-1"
+    encrypt        = true
+    dynamodb_table = "my-lock-table"
+  }
+}
+```
 
 ## Things to add
 This is the list of the missing feature that would be great to have
