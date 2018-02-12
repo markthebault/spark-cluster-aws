@@ -13,7 +13,7 @@ Make sure you change the default value for the variable `public_admin_ip_range` 
 
 The spark workers are created by an auto scaling group. Adjust the trigger to your needs.
 
-![Cluster schemas](https://markthebault/spark-cluster-aws/raw/master/spark-cluster.png)
+![Cluster schemas](https://github.com/markthebault/spark-cluster-aws/raw/master/spark-cluster.png)
 
 There is a private host zone created to add dns support for the spark master and the zeppelin server. This is a private zone, it will not be reachable from internet.
 
