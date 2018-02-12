@@ -1,5 +1,7 @@
 
 resource "aws_instance" "bastion" {
+  depends_on = ["module.vpc"]
+
   ami           = "${lookup(var.ami_bastion, var.aws_region)}"
   instance_type = "t2.micro"
   subnet_id = "${module.vpc.public_subnets[0]}"

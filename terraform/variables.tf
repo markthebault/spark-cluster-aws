@@ -55,3 +55,11 @@ variable "spark_worker_cores" {
 variable "spark_docker_image" {
   default = "gettyimages/spark:2.2.1-hadoop-2.7"
 }
+
+variable "zeppelin_docker_image" {
+  default = "markthebault/zeppelin:0.7.3-spark2.2.1"
+}
+
+variable "spark_proxy_docker_image" {
+  default = "markthebault/spark-ui-proxy"
+}

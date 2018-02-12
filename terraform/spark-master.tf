@@ -8,6 +8,8 @@ data "template_file" "spark_master_user_data" {
 
 
 resource "aws_instance" "spark_master" {
+  depends_on = ["module.vpc"]
+
   ami           = "${lookup(var.ami_coreos, var.aws_region)}"
   instance_type = "${var.spark_master_instance_type}"
   subnet_id = "${module.vpc.private_subnets[0]}"
@@ -22,6 +24,10 @@ resource "aws_instance" "spark_master" {
     Terraform = "true"
     Environment = "${var.environment}"
   }
+}
+
+output "spark_master_uri" {
+  value = "spark://${aws_instance.spark_master.private_dns}:7077"
 }
 
 
@@ -43,8 +49,8 @@ resource "aws_security_group" "spark_master" {
 resource "aws_security_group_rule" "master_to_worker" {
   type = "ingress"
   from_port = 0
-  to_port = 65535
-  protocol = "tcp"
+  to_port = 0
+  protocol = "-1"
   source_security_group_id = "${aws_security_group.spark_worker.id}"
 
   security_group_id = "${aws_security_group.spark_master.id}"
@@ -53,8 +59,8 @@ resource "aws_security_group_rule" "master_to_worker" {
 resource "aws_security_group_rule" "master_to_master" {
   type = "ingress"
   from_port = 0
-  to_port = 65535
-  protocol = "tcp"
+  to_port = 0
+  protocol = "-1"
   source_security_group_id = "${aws_security_group.spark_master.id}"
 
   security_group_id = "${aws_security_group.spark_master.id}"
@@ -62,10 +68,20 @@ resource "aws_security_group_rule" "master_to_master" {
 
 resource "aws_security_group_rule" "master_to_bastion" {
   type = "ingress"
-  from_port = 0
-  to_port = 65535
+  from_port = 22
+  to_port = 22
   protocol = "tcp"
   source_security_group_id = "${aws_security_group.bastion.id}"
+
+  security_group_id = "${aws_security_group.spark_master.id}"
+}
+
+resource "aws_security_group_rule" "master_to_zeppelin" {
+  type = "ingress"
+  from_port = 0
+  to_port = 0
+  protocol = "-1"
+  source_security_group_id = "${aws_security_group.zeppelin.id}"
 
   security_group_id = "${aws_security_group.spark_master.id}"
 }
